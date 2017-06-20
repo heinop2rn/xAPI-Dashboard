@@ -45,16 +45,27 @@
 		</div>
 		<script>
 
-			var wrapper = ADL.XAPIWrapper;
+			var opt = {
+				endpoint : "https://htk.tlu.ee/lrs/data/xAPI/",
+				user: "65d86065e4aa635e545b1d71dcc8894c35ab686a",
+				password: "cffe0080f36cc30383c0c9f9a075cd5030e75838",
+				withCredentials: true
+			};
+			wrapper = ADL.XAPIWrapper.changeConfig(opt);
+			console.log(opt);
+
+			console.log(ADL.XAPIWrapper.testConfig());
+
+
 			var dash = new ADL.XAPIDashboard();
-			wrapper.changeConfig({'endpoint': 'https://lrs.adlnet.gov/xAPI/'});
 
 			var handle = setInterval(function(){
 				document.querySelector('span').innerHTML += '.';
 			}, 500);
 
+
 			var cutoff = new Date(Date.now());
-			cutoff = new Date(cutoff.getFullYear(),cutoff.getMonth(),cutoff.getDate()-30);
+			cutoff = new Date(cutoff.getFullYear(),cutoff.getMonth(),cutoff.getDate()-20);
 			cutoff = cutoff.toISOString();
 
 			dash.fetchAllStatements({since: cutoff}, wrapper, function()
@@ -66,7 +77,7 @@
 				var header = document.createElement('h2');
 				header.innerHTML = 'Verb Popularity Over Last 30 Days';
 				container.insertBefore(header, container.firstChild);
-	
+
 				// create first graph
 				var verbsChart = dash.createBarChart({
 					container: '#verbs svg',
@@ -95,7 +106,7 @@
 				header = document.createElement('h2');
 				header.innerHTML = 'LRS Activity Over Last 30 Days';
 				container.insertBefore(header, container.firstChild);
-	
+
 				// create second graph
 				var activityChart = dash.createLineChart({
 					container: '#lrsActivity svg',
@@ -126,7 +137,7 @@
 				header = document.createElement('h2');
 				header.innerHTML = 'Most Active Actors Over Last 30 Days';
 				container.insertBefore(header, container.firstChild);
-	
+
 				var actorChart = dash.createBarChart({
 					container: '#actorActivity svg',
 					groupBy: 'actor.mbox',
@@ -144,6 +155,7 @@
 				});
 				actorChart.draw();
 			});
+
 
 		</script>
 	</body>
